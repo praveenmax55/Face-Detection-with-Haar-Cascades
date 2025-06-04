@@ -53,30 +53,51 @@ iv) Perform face detection with label in real-time video from webcam.
 - Step 4: Display the video frame with rectangles around detected faces  
 - Step 5: Exit loop and close windows when ESC key (key code 27) is pressed  
 - Step 6: Release video capture and destroy all OpenCV windows  
-
-## PROGRAM :
+## PROGRAM
+```
+from google.colab.patches import cv2_imshow
 import cv2
 
-# Load pre-trained Haar cascade for face detection
+# Load Haar cascade
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-# Read the input image
-image = cv2.imread('your_image.jpg')
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# Read the image
+image = cv2.imread('adarsh photo .jpg')
 
-# Detect faces
-faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+# Check if image was loaded
+if image is None:
+    print("Error: Image not found.")
+else:
+    # Convert to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# Draw rectangles around detected faces
-for (x, y, w, h) in faces:
-    cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
+    # Detect faces
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
 
-# Show the result
-cv2.imshow('Detected Faces', image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    # Draw rectangles
+    for (x, y, w, h) in faces:
+        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-## OUTPUT:
+    # Get screen resolution
+    screen_res = 1920, 1080  # You can change this based on your screen
+    scale_width = screen_res[0] / image.shape[1]
+    scale_height = screen_res[1] / image.shape[0]
+    scale = min(scale_width, scale_height)
 
+    window_width = int(image.shape[1] * scale)
+    window_height = int(image.shape[0] * scale)
 
-![WhatsApp Image 2025-05-25 at 14 13 54_13330229](https://github.com/user-attachments/assets/faf7c616-160e-4a50-ab56-6631535f48e6)
+    # Resize image
+    resized_image = cv2.resize(image, (window_width, window_height))
+
+    # Show image
+    cv2_imshow(resized_image)
+
+    # Note: cv2.waitKey(0) and cv2.destroyAllWindows() are not needed with cv2_imshow
+    # as it displays the image directly in the notebook output.
+```
+## OUTPUT
+![output](https://github.com/user-attachments/assets/d5cd353f-1ba1-47a3-a76f-fad582465025)
+
+# RESULT:
+Thus the given objective of face detection is done sucessfully.
